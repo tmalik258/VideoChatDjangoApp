@@ -5,6 +5,7 @@ import time
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 from agora_token_builder import RtcTokenBuilder
 
@@ -13,8 +14,8 @@ from .models import RoomMember
 
 # Create your views here.
 def getToken(request):
-    appId = "fd1a7fdf4d644182bfad617270e4df55"
-    appCertificate = "8b798020e7714ab4943c219e6fb1a516"
+    appId = settings.APP_ID
+    appCertificate = settings.APP_CERTIFICATE
     channelName = request.GET.get("channel")
     uid = random.randint(1, 230)
     expirationTimeInSeconds = 3600 * 24
