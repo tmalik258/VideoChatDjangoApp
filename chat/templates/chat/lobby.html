@@ -1,6 +1,54 @@
 {% extends 'chat/layout.html' %}
-
+{% load static %}
 
 {% block content %}
-<h2>Lobby</h2>
+<section id="form-container">
+    <img src="{% static 'images/chat-icon.png' %}" alt="Chat Icon" id="logo">
+
+    <div id="welcome-message">
+        <h1>Welcome to MyChat</h1>
+        <p>A group video calling application just for you!</p>
+    </div>
+
+    <form action="" id="form">
+        <div class="field-wrapper">
+            <div class="form-field">
+                <label>Room:</label>
+                <input type="text" name="room" placeholder="Enter a room name ..." style="text-transform: uppercase;">
+            </div>
+            <div class="form-field">
+                <label>Name:</label>
+                <input type="text" name="username" placeholder="Enter your name ..." style="text-transform: uppercase;">
+            </div>
+            <div class="form-field">
+                <input type="submit" value="Join Stream">
+            </div>
+        </div>
+    </form>
+</section>
+
+<script type="text/javascript">
+    const form = document.getElementById( 'form' );
+
+    const handleSubmit = async ( e ) =>
+    {
+        e.preventDefault();
+        let room = e.target.room.value.toUpperCase();
+        let username = e.target.username.value;
+        let response = await fetch( `/get_token/?channel=${ room }` );
+        let data = await response.json();
+
+        let UID = data.uid;
+        let TOKEN = data.token;
+
+        sessionStorage.setItem( 'UID', UID );
+        sessionStorage.setItem( 'TOKEN', TOKEN );
+        sessionStorage.setItem( 'room', room );
+        sessionStorage.setItem( 'username', username );
+
+        window.open( '/room/', '_self' );
+    };
+
+    form.addEventListener( 'submit', handleSubmit )
+</script>
 {% endblock content %}
